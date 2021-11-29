@@ -18,12 +18,11 @@
                 }
                 _stat = value;
             } 
-        }
+        }   
         public DateTime SeasonStartDate { get; set; }
         public DateTime SeasonEndDate { get; set; }
-        public SeasonalProduct(string name, decimal price, bool onCredit, DateTime start, DateTime end) : base(name, price, onCredit)
+        public SeasonalProduct(string name, decimal price, int state, DateTime end) : base(name, price, state)
         {
-           SeasonStartDate = start;
            SeasonEndDate = end;
 
         }

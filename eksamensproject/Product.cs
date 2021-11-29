@@ -10,8 +10,8 @@
             get => _id;
             set 
             {
-                if (Id >= 0) { throw new Exception($"{value} has to be 1 or above"); }
-                _id = value;
+                if (Id > 0) { _id = value; }
+                
             } 
         }
         public string Name 
@@ -26,13 +26,13 @@
         public decimal Price { get; set; }
         public ProStat State { get; set; }
         public bool CanBeBoughtOnCredit { get; set; }
-        public Product(string name, decimal price, bool onCredit) 
+        public Product(string name, decimal price, int stat) 
         {
             prevId++;
             Name = name;
             Price = price;
-            CanBeBoughtOnCredit = onCredit;
-            Price = price;
+            if (stat == 1) { State = ProStat.Active; }
+            else{ State = ProStat.inActive; }
             Id = prevId;
         }
         public override string ToString() 
@@ -40,7 +40,6 @@
             return Id.ToString() + " " + Name + " " + Price.ToString();
         }
     }
-    [Flags]
     public enum ProStat
     {
         inActive = 0,
