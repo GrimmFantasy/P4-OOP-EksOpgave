@@ -15,7 +15,7 @@
         }
         public override string ToString() 
         { 
-            return Id.ToString() + " " + User.ToString() + " " + Amount.ToString() + " " + Date.ToString();
+            return Id.ToString() + " ; " + User.ToString() + " ; " + Amount.ToString() + " ; " + Date.ToString();
         }
     }
 }

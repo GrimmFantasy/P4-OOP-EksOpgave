@@ -2,7 +2,7 @@
 {
     public class StregSystem 
     {
-        public List<string> Log { get; set; }
+        public List<Transaction> Log { get; set; }
         public List<User> Users { get; set; }
         public List<Product> Products { get; set; }
         public IEnumerable<Product> ActiveProducts { get; set; } 
@@ -24,7 +24,7 @@
             try
             {
                 insert.Execute();
-                Log.Add(insert.ToString());
+                Log.Add(insert);
             }
             catch (Exception ex)
             {
@@ -36,7 +36,7 @@
             try
             {
                 buy.Execute();
-                Log.Add(buy.ToString());
+                Log.Add(buy);
             }
             catch (Exception ex) 
             { 
@@ -55,83 +55,103 @@
         public void ReadUsers() 
         {
             Users = new List<User>();
-            using (var reader = new StreamReader(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\users.csv"))
+            foreach (var line in File.ReadLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\users.csv")) 
             {
-               
-                while (!reader.EndOfStream)
+                if (!line.StartsWith("id")) 
+                { 
+                var array = line.Split(',');
+                User u = new(array[1], array[2], array[5], array[3]);
+                try
                 {
-                    List<string> lines = reader.ReadLine().Split().ToList();
-                    foreach (var line in lines) 
-                    {
-                        if (!line.StartsWith("id")) 
-                        { 
-                        var array = line.Split(',');
-                        User u = new(array[1], array[2], array[5], array[3]);
-                        try
-                        {
-                            decimal balance = Convert.ToDecimal(array[4]);
-                            int id = Convert.ToInt32(array[0]);
-                            u.Id=id;
-                            u.Balance=balance;
+                    decimal balance = Convert.ToDecimal(array[4]);
+                    int id = Convert.ToInt32(array[0]);
+                    u.Id=id;
+                    u.Balance=balance;
 
-                        }
-                        catch (Exception ex) { throw ex; }
-
-                        Users.Add(u);
-                        }
-
-                    }
                 }
+                catch (Exception ex) { throw ex; }
+
+                Users.Add(u);
+                }
+
             }
         }
         public void ReadProduct() 
         { 
             Products = new List<Product>();
-            using (var reader = new StreamReader(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\products.csv"))
+            decimal price;
+            int id;
+            int state;
+            foreach (var line in File.ReadLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\products.csv"))
             {
-
-                while (!reader.EndOfStream)
+                if (!line.StartsWith("id"))
                 {
-                    List<string> lines = reader.ReadLine().Split().ToList();
-                    decimal price;
-                    int id;
-                    int state;
-                    foreach (var line in lines)
+                    var array = line.Split(';');
+                    try
                     {
-                        if (!line.StartsWith("id"))
+                        price = Convert.ToDecimal(array[2]);
+                        id = Convert.ToInt32(array[0]);
+                        state = Convert.ToInt32(array[3]);
+                    }
+                    catch (Exception ex) { throw ex; }
+                    if (array[4] != "" || array[4] != " ")
+                    {
+                        Product p = new(id, array[1], price, state);
+                        Products.Add(p);
+                    }
+                    else 
+                    {
+                        DateTime diactDate;
+                        try 
                         {
-                            var array = line.Split(';');
-                            try
-                            {
-                                price = Convert.ToDecimal(array[2]);
-                                id = Convert.ToInt32(array[0]);
-                                state = Convert.ToInt32(array[3]);
-                            }
-                            catch (Exception ex) { throw ex; }
-                            if (array[4] != "" || array[4] != " ")
-                            {
-                                Product p = new(array[1], price, state);
-                                p.Id = id;
-                                Products.Add(p);
-                            }
-                            else 
-                            {
-                                DateTime diactDate;
-                                try 
-                                {
-                                    diactDate = Convert.ToDateTime(array[4]);
+                            diactDate = Convert.ToDateTime(array[4]);
                                 
-                                }
-                                catch(Exception ex) { throw ex; }
-                                SeasonalProduct p = new(array[1], price, state, diactDate);
-                                p.Id=id;
-                                Products.Add(p);
-                            }
                         }
-
+                        catch(Exception ex) { throw ex; }
+                        SeasonalProduct p = new(id, array[1], price, state, diactDate);
+                        Products.Add(p);
                     }
                 }
+
             }
+                
+            
+        }
+        public List<Transaction> GetTransactions(User user, int count) 
+        {
+            List<Transaction> UserTanscations = Log.Where(l => l.User.GetHashCode == user.GetHashCode).Take(count).ToList();
+            UserTanscations.Sort((x, y) => DateTime.Compare(x.Date, y.Date));
+            return UserTanscations;
+        }
+        public void AktiveProducts() 
+        {
+            ActiveProducts = Products.Where(p=> p.State == ProStat.Active);
+        }
+        public User GetUser(Func<User, bool> predicate)
+        {
+            User user = Users.Where(predicate).FirstOrDefault();
+            return user == null ? throw new Exception() : user;
+        }
+        public void WriteLog() 
+        {
+            List<string> logs = new List<string>();
+           
+            foreach (var t in Log) 
+            {
+                if (t.GetType() == typeof(InsertCashTransaction)) 
+                { 
+                    logs.Add(t.Id + ";" + t.Date + ";" + t.Amount + ";" + t.User.UserName);
+                
+                }
+                if (t.GetType() == typeof(BuyTransaction)) 
+                {
+                    logs.Add(t.Id + ";" + t.Date + ";" + t.Amount + ";" + t.User.UserName + ";" + t.Product);
+                }
+            
+            }
+
+
+            File.WriteAllLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\TransLog.csv", logs);
         }
     }
 

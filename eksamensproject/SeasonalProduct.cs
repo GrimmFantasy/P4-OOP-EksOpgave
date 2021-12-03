@@ -21,7 +21,7 @@
         }   
         public DateTime SeasonStartDate { get; set; }
         public DateTime SeasonEndDate { get; set; }
-        public SeasonalProduct(string name, decimal price, int state, DateTime end) : base(name, price, state)
+        public SeasonalProduct(int id, string name, decimal price, int state, DateTime end) : base(id, name, price, state)
         {
            SeasonEndDate = end;
 

@@ -20,11 +20,13 @@ namespace EksOP
             } 
             Console.WriteLine("Product");
             stregSystem.ReadProduct();
-            foreach (Product p in stregSystem.Products) 
+            stregSystem.AktiveProducts();
+            foreach (Product p in stregSystem.ActiveProducts) 
             { 
-            Console.WriteLine(p.ToString() + " " + p.Id);  
+            Console.WriteLine(p.ToString() + " id: " + p.State);  
                 
             }
+
         }
     }
 

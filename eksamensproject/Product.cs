@@ -2,7 +2,6 @@
 {
     public class Product 
     {
-        private static int prevId = 0;
         private int _id;
         private string _name;
         public int Id 
@@ -10,8 +9,8 @@
             get => _id;
             set 
             {
-                if (Id > 0) { _id = value; }
-                
+                if (value <= 0) { return; }
+                else { _id = value; }
             } 
         }
         public string Name 
@@ -26,14 +25,13 @@
         public decimal Price { get; set; }
         public ProStat State { get; set; }
         public bool CanBeBoughtOnCredit { get; set; }
-        public Product(string name, decimal price, int stat) 
+        public Product(int id, string name, decimal price, int stat) 
         {
-            prevId++;
             Name = name;
             Price = price;
-            if (stat == 1) { State = ProStat.Active; }
-            else{ State = ProStat.inActive; }
-            Id = prevId;
+            if (stat == 0) { State = ProStat.inActive; }
+            else{ State = ProStat.Active; }
+            Id = id;
         }
         public override string ToString() 
         { 
