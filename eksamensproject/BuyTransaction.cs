@@ -9,7 +9,7 @@
         }
         public override string ToString() 
         {
-            return "Transktion:" + User.UserName.ToString() + " brought " +" "+ Product.Name + Amount + " on the " + Date.ToString() + ". Id: " + Id.ToString();
+            return Id.ToString() + ";" + User.UserName.ToString() + ";" + Product.Name + ";" + Amount + ";" + Date.ToString();
         }
 
         public void Execute() 

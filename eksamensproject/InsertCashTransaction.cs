@@ -8,7 +8,7 @@
         }
         public override string ToString() 
         {
-            return "Deposit:" + User.UserName.ToString() + " deposited " + Amount + " on the " + Date.ToString() + ". Id: " + Id.ToString();
+            return Id.ToString()+";" + User.UserName.ToString() + ";" + Amount + ";" + Date.ToString();
         }
         public void Execute() 
         {

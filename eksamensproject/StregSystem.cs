@@ -2,7 +2,7 @@
 {
     public class StregSystem 
     {
-        public List<Transaction> Log { get; set; }
+        public List<Transaction> Log { get; set; } = new List<Transaction>();
         public List<User> Users { get; set; }
         public List<Product> Products { get; set; }
         public IEnumerable<Product> ActiveProducts { get; set; } 
@@ -138,15 +138,8 @@
            
             foreach (var t in Log) 
             {
-                if (t.GetType() == typeof(InsertCashTransaction)) 
-                { 
-                    logs.Add(t.Id + ";" + t.Date + ";" + t.Amount + ";" + t.User.UserName);
-                
-                }
-                if (t.GetType() == typeof(BuyTransaction)) 
-                {
-                    logs.Add(t.Id + ";" + t.Date + ";" + t.Amount + ";" + t.User.UserName + ";" + t.Product);
-                }
+                logs.Add(t.ToString());
+               
             
             }
 
