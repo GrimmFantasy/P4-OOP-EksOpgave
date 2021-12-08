@@ -7,42 +7,36 @@
         public List<Product> Products { get; set; }
         public IEnumerable<Product> ActiveProducts { get; set; } 
         public StregSystem() { }
-        public string BuyProduct(User user, Product product) 
-        {
-            BuyTransaction transaction = new(product, user);
-            transaction.Execute();
-            return transaction.ToString();
-        }
-        public string AddCreditsToAccount(User user, decimal amount) 
-        { 
-            InsertCashTransaction transaction = new(user, amount);
-            transaction.Execute();
-            return transaction.ToString();
-        }
-        public void AddCreditsToAccount(InsertCashTransaction insert) 
+        public BuyTransaction BuyProduct(User user, Product product) 
         {
             try
             {
-                insert.Execute();
-                Log.Add(insert);
+                BuyTransaction transaction = new(product, user);
+                transaction.Execute();
+                Log.Add(transaction);
+                return transaction;
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public void BuyProduct(BuyTransaction buy)
-        {
+        public InsertCashTransaction AddCreditsToAccount(User user, decimal amount) 
+        { 
             try
             {
-                buy.Execute();
-                Log.Add(buy);
+                InsertCashTransaction transaction = new(user, amount);
+                transaction.Execute();
+                Log.Add(transaction);
+                return transaction;
+
             }
-            catch (Exception ex) 
-            { 
+            catch (Exception ex)
+            {
                 throw new Exception(ex.Message);
             }
         }
+        
         public Product GetProductById(int id) 
         {
             Product p = ActiveProducts.Where(a => a.Id == id).Single();
