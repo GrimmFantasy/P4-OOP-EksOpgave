@@ -10,22 +10,23 @@
 
         public void Close()
         {
-            
+            Console.Clear();
+            Start();
         }
 
         public void DisplayAdminCommandNotFoundMessage(string adminCommand)
         {
-            Console.WriteLine("Admin command not found");
+            Console.WriteLine("command not found");
         }
 
         public void DisplayGeneralError(string errorString)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"Oops, {errorString} occoud");
         }
 
         public void DisplayInsufficientCash(User user, Product product)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"You have insufficient cash for {product.Name}, you are missing {user.Balance-product.Price},-");
         }
 
         public void DisplayProductNotFound(string product)
@@ -35,32 +36,31 @@
 
         public void DisplayTooManyArgumentsError(string command)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"{command} is too much, i can't handle it");
         }
 
         public void DisplayUserBuysProduct(BuyTransaction transaction)
         {
-            throw new NotImplementedException();
+           Console.WriteLine($"{transaction.User.UserName} brought {transaction.Product.Name}");
         }
 
         public void DisplayUserBuysProduct(int count, BuyTransaction transaction)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"{transaction.User.UserName} brought {transaction.Product.Name}");
         }
 
         public void DisplayUserInfo(User user)
         {
-            throw new NotImplementedException();
+            Console.WriteLine($"{user.UserName}");
+            Console.WriteLine($"Balance: {user.Balance}");
         }
 
         public void DisplayUserNotFound(string username)
         {
             Console.WriteLine($"username {username} not found");
-            Start();
         }
         public void DisplayProduct() 
         { 
-            Console.Clear();
             foreach (Product p in _system.ActiveProducts)
             { 
                 Console.WriteLine(p.ToString());
@@ -68,6 +68,7 @@
         }
         public void Start()
         {
+            Console.Clear();
             Console.Write("Input Username: ");
             string userName = Console.ReadLine();
             if (_system.GetUserByUsername(userName)==null) { DisplayUserNotFound(userName); }
