@@ -1,6 +1,6 @@
 ﻿namespace EksOP
 {
-    internal class StregsystemUI : IStregsystemUI
+    public class StregsystemUI : IStregsystemUI
     {
         private StregSystem _system { get; set; }
         public StregsystemUI(StregSystem streg)
@@ -51,7 +51,7 @@
 
         public void DisplayUserInfo(User user)
         {
-            Console.WriteLine($"{user.UserName}");
+            Console.WriteLine($"User: {user.UserName}");
             Console.WriteLine($"Balance: {user.Balance}");
         }
 
@@ -69,22 +69,8 @@
         public void Start()
         {
             Console.Clear();
-            Console.Write("Input Username: ");
-            string userName = Console.ReadLine();
-            if (_system.GetUserByUsername(userName)==null) { DisplayUserNotFound(userName); }
-            DisplayProduct();
-            Console.Write("Enter Product id: ");
-            string productids = Console.ReadLine();
-            List<string> ids = productids.Split('+').ToList<string>();
-            foreach (string id in ids) 
-            {
-                try 
-                {
-                    _system.BuyProduct(_system.GetUserByUsername(userName), _system.GetProductById(Convert.ToInt32(id)));
-                                        
-                }
-                catch { DisplayProductNotFound(id); }
-            }
+            Console.Write("Input Command: ");
+            
 
         }
     }

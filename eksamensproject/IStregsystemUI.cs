@@ -12,7 +12,9 @@
         void Close();
         void DisplayInsufficientCash(User user, Product product);
         void DisplayGeneralError(string errorString);
+        void DisplayProduct();
         void Start();
+
     }
 
 }

@@ -1,4 +1,6 @@
-﻿namespace EksOP
+﻿using System.Text.RegularExpressions;
+
+namespace EksOP
 {
     public class StregSystem 
     {
@@ -6,7 +8,12 @@
         public List<User> Users { get; set; }
         public List<Product> Products { get; set; }
         public IEnumerable<Product> ActiveProducts { get; set; } 
-        public StregSystem() { }
+        public StregSystem()
+        {
+            ReadUsers();
+            ReadProduct();
+            AktiveProducts();
+        }
         public BuyTransaction BuyProduct(User user, Product product) 
         {
             try
@@ -39,12 +46,15 @@
         
         public Product GetProductById(int id) 
         {
-            Product p = ActiveProducts.Where(a => a.Id == id).Single();
+            Product p = ActiveProducts.Where(a => a.Id == id).FirstOrDefault();
             return p;
         }
-        public User GetUserByUsername(string username) 
+        public User GetUserByUsername(string userName) 
         {
-            return Users.Where(u => u.GetHashCode() == username.GetHashCode()).Single();
+            string username = userName;
+            User u = Users.Where(u => u.GetHashCode() == username.GetHashCode()).FirstOrDefault();
+            if (u != null) { return u; }
+            return null;
         }
         public void ReadUsers() 
         {
@@ -80,7 +90,8 @@
             {
                 if (!line.StartsWith("id"))
                 {
-                    var array = line.Split(';');
+                    
+                    var array = Regex.Replace(line, "<.*?>", String.Empty).Split(';');
                     try
                     {
                         price = Convert.ToDecimal(array[2]);
