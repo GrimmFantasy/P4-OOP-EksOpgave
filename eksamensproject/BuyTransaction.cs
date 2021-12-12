@@ -14,7 +14,8 @@
 
         public void Execute() 
         {
-            if (!Product.CanBeBoughtOnCredit && User.Balance < Amount && Product.State == ProStat.inActive) { throw new Exception($"{User.UserName} has Insufficient Credits to buy {Product.Name}"); }
+            if (!Product.CanBeBoughtOnCredit && User.Balance < Amount) { throw new Exception($"{User.UserName} has Insufficient Credits to buy {Product.Name}."); }
+            else if(Product.State == ProStat.inActive) { throw new Exception($"{Product.Name} can not be brought at this time."); }
             User.Balance = User.Balance - Amount;
         }
     }

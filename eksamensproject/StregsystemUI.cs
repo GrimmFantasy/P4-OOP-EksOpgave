@@ -11,22 +11,23 @@
         public void Close()
         {
             Console.Clear();
-            Start();
+            _system.WriteLog();
+            Environment.Exit(0);
         }
 
         public void DisplayAdminCommandNotFoundMessage(string adminCommand)
         {
-            Console.WriteLine("command not found");
+            Console.WriteLine($"{adminCommand} command not found");
         }
 
         public void DisplayGeneralError(string errorString)
         {
-            Console.WriteLine($"Oops, {errorString} occoud");
+            Console.WriteLine($"Oops, the {errorString} command did not work.");
         }
 
         public void DisplayInsufficientCash(User user, Product product)
         {
-            Console.WriteLine($"You have insufficient cash for {product.Name}, you are missing {user.Balance-product.Price},-");
+            Console.WriteLine($"You have insufficient cash for {product.Name}, you are missing {product.Price-user.Balance},-");
         }
 
         public void DisplayProductNotFound(string product)
@@ -46,13 +47,25 @@
 
         public void DisplayUserBuysProduct(int count, BuyTransaction transaction)
         {
-            Console.WriteLine($"{transaction.User.UserName} brought {transaction.Product.Name}");
+            Console.WriteLine($"{transaction.User.UserName} brought {count} {transaction.Product.Name}");
         }
 
         public void DisplayUserInfo(User user)
         {
+            Console.WriteLine($"{user.FirstName} {user.LastName}");
             Console.WriteLine($"User: {user.UserName}");
             Console.WriteLine($"Balance: {user.Balance}");
+            if (user.Balance <= 50) 
+            {
+                Console.WriteLine("Low cash balacen!");
+            }
+            Console.WriteLine("10 Newst transactions");
+
+            foreach (Transaction t in _system.GetTransactions(user, 10)) 
+            {
+                Console.WriteLine(t.ToString());
+            }
+            Console.WriteLine();
         }
 
         public void DisplayUserNotFound(string username)

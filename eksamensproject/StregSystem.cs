@@ -46,6 +46,11 @@ namespace EksOP
         
         public Product GetProductById(int id) 
         {
+            Product p = Products.Where(a => a.Id == id).FirstOrDefault();
+            return p;
+        }
+        public Product GetActiveProductById(int id)
+        {
             Product p = ActiveProducts.Where(a => a.Id == id).FirstOrDefault();
             return p;
         }
