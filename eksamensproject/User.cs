@@ -79,7 +79,7 @@
         }
         public override string ToString() 
         {
-            return FirstName + " " + LastName + " " + Email;
+            return $"{FirstName} {LastName} ({Email})";
         }
         public override bool Equals(object? user)
         {

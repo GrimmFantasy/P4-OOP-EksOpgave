@@ -2,17 +2,17 @@
 {
     public class StregsystemController
     {
-        public StregSystem stregSystem { get; set; }
-        public IStregsystemUI stregsystemUI { get; set;}
-        public User CurrentUser { get; set; }
+        public StregSystem st { get; set; }
+        public IStregsystemUI ui { get; set;}
+        private User CurrentUser { get; set; }
         public StregsystemController(StregSystem streg, IStregsystemUI uI)
         {
-            this.stregSystem = streg;
-            this.stregsystemUI = uI;
+            this.st = streg;
+            this.ui = uI;
         }
         public void Start() 
         {
-            stregsystemUI.Start();
+            ui.Start();
             string command = Console.ReadLine();
             ParseCommand(command);
         }
@@ -44,7 +44,7 @@
                         Addcredits(command);
                         break;
                     default:
-                        stregsystemUI.DisplayAdminCommandNotFoundMessage(command);
+                        ui.DisplayAdminCommandNotFoundMessage(command);
                         break;
                 }
 
@@ -59,16 +59,16 @@
         public void buyPhase(string command)
         {
             List<string> commands = command.Split().ToList<string>();
-            CurrentUser = stregSystem.GetUserByUsername(commands[0]);
-            if (CurrentUser == null) { stregsystemUI.DisplayUserNotFound(commands[0]); }
+            CurrentUser = st.GetUserByUsername(commands[0]);
+            if (CurrentUser == null) { ui.DisplayUserNotFound(commands[0]); }
             else
             {
-                stregsystemUI.DisplayUserInfo(CurrentUser);
+                ui.DisplayUserInfo(CurrentUser);
                 commands.RemoveAt(0);
                 Product p;
                 if (commands.Count < 1)
                 {
-                    stregsystemUI.DisplayProduct();
+                    ui.DisplayProduct();
                     Console.WriteLine();
                     Console.Write("Enter product id(s):");
                     string productids = Console.ReadLine();
@@ -77,16 +77,16 @@
                     foreach (string id in ids)
                     {
 
-                        p = stregSystem.GetActiveProductById(Convert.ToInt32(id));
+                        p = st.GetActiveProductById(Convert.ToInt32(id));
                         if (p != null) 
                         { 
                             try
                             {
-                                stregsystemUI.DisplayUserBuysProduct(stregSystem.BuyProduct(CurrentUser, p));
+                                ui.DisplayUserBuysProduct(st.BuyProduct(CurrentUser, p));
                             }
-                            catch { stregsystemUI.DisplayInsufficientCash(CurrentUser, p); }
+                            catch { ui.DisplayInsufficientCash(CurrentUser, p); }
                         }
-                        else { stregsystemUI.DisplayProductNotFound(id); }    
+                        else { ui.DisplayProductNotFound(id); }    
                     }
                     
                 }
@@ -98,7 +98,7 @@
                         int tempId = Int32.Parse(commands.Last());
                         int count = Int32.Parse(commands.First());
                             
-                        p = stregSystem.GetActiveProductById(tempId);
+                        p = st.GetActiveProductById(tempId);
                         decimal totalprice = p.Price * count;
                         if (p != null)
                         {
@@ -107,26 +107,24 @@
                                 
                                 for (int i = 0; i < count; i++) 
                                 {
-                                    stregSystem.BuyProduct(CurrentUser, p);
+                                    st.BuyProduct(CurrentUser, p);
                                 }
                                 BuyTransaction t = new(p, CurrentUser);
-                                stregsystemUI.DisplayUserBuysProduct(count, t);
+                                ui.DisplayUserBuysProduct(count, t);
 
                             }
-                            else { stregsystemUI.DisplayInsufficientCash(CurrentUser, p); }
+                            else { ui.DisplayInsufficientCash(CurrentUser, p); }
                                
                         }
-                        else { stregsystemUI.DisplayProductNotFound(temp); }
+                        else { ui.DisplayProductNotFound(temp); }
                     }
-                    catch { stregsystemUI.DisplayGeneralError(temp); }
-
-                    
+                    catch { ui.DisplayNotProductID(temp); }
                 }
             }
         }
         public void quit() 
         { 
-            stregsystemUI.Close();
+            ui.Close();
         }
         public void productChangeState(string command) 
         { 
@@ -135,7 +133,7 @@
             Product p;
             try
             {
-                p = stregSystem.GetProductById(Int32.Parse(proID));
+                p = st.GetProductById(Int32.Parse(proID));
                 if (newState == ":activate")
                 {
                     p.State = ProStat.Active;
@@ -144,9 +142,9 @@
                 {
                     p.State = ProStat.inActive;
                 }
-                stregSystem.AktiveProducts();
+                st.AktiveProducts();
             }
-            catch{ stregsystemUI.DisplayProductNotFound(proID); }
+            catch{ ui.DisplayProductNotFound(proID); }
             restart();
         }
         public void ProductCeditEdit(string command) 
@@ -156,7 +154,7 @@
             Product p;
             try
             {
-                p = stregSystem.GetProductById(Int32.Parse(proID));
+                p = st.GetProductById(Int32.Parse(proID));
                 if (cedit == ":crediton")
                 {
                     p.CanBeBoughtOnCredit = true;
@@ -166,7 +164,7 @@
                     p.CanBeBoughtOnCredit = false;
                 }
             }
-            catch { stregsystemUI.DisplayProductNotFound(proID); }
+            catch { ui.DisplayProductNotFound(proID); }
             restart();
         }
         public void Addcredits(string command) 
@@ -176,10 +174,10 @@
             User u;
             try
             {
-                u = stregSystem.GetUserByUsername(username);
-                stregSystem.AddCreditsToAccount(u, Int32.Parse(amount));
+                u = st.GetUserByUsername(username);
+                st.AddCreditsToAccount(u, Int32.Parse(amount));
             }
-            catch { stregsystemUI.DisplayUserNotFound(username); }
+            catch { ui.DisplayUserNotFound(username); }
             restart();
         }
     }

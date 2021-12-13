@@ -11,7 +11,7 @@
         void DisplayUserBuysProduct(int count, BuyTransaction transaction);
         void Close();
         void DisplayInsufficientCash(User user, Product product);
-        void DisplayGeneralError(string errorString);
+        void DisplayNotProductID(string errorString);
         void DisplayProduct();
         void Start();
 

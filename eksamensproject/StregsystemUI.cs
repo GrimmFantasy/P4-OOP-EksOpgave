@@ -20,9 +20,9 @@
             Console.WriteLine($"{adminCommand} command not found");
         }
 
-        public void DisplayGeneralError(string errorString)
+        public void DisplayNotProductID(string errorString)
         {
-            Console.WriteLine($"Oops, the {errorString} command did not work.");
+            Console.WriteLine($"The \"{errorString}\" is not a number.");
         }
 
         public void DisplayInsufficientCash(User user, Product product)
@@ -52,7 +52,7 @@
 
         public void DisplayUserInfo(User user)
         {
-            Console.WriteLine($"{user.FirstName} {user.LastName}");
+            Console.WriteLine(user.ToString());
             Console.WriteLine($"User: {user.UserName}");
             Console.WriteLine($"Balance: {user.Balance}");
             if (user.Balance <= 50) 
