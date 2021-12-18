@@ -2,16 +2,20 @@
 {
     public class StregsystemUI : IStregsystemUI
     {
-        private StregSystem _system { get; set; }
-        public StregsystemUI(StregSystem streg)
+        private bool _running { get; set; }
+        private IStregSystem _system { get; set; }
+        public StregsystemUI(IStregSystem streg)
         {
             _system = streg;
         }
+
+        public event StregsystemEvent? Command;
 
         public void Close()
         {
             Console.Clear();
             _system.WriteLog();
+            _running = false;
             Environment.Exit(0);
         }
 
@@ -55,9 +59,8 @@
             Console.WriteLine(user.ToString());
             Console.WriteLine($"User: {user.UserName}");
             Console.WriteLine($"Balance: {user.Balance}");
-            if (user.Balance <= 50) 
-            {
-                Console.WriteLine("Low cash balacen!");
+            if (user.Balance <= 50) {
+                Console.WriteLine("Your balance is low");
             }
             Console.WriteLine("10 Newst transactions");
 
@@ -67,11 +70,12 @@
             }
             Console.WriteLine();
         }
-
+       
         public void DisplayUserNotFound(string username)
         {
             Console.WriteLine($"username {username} not found");
         }
+
         public void DisplayProduct() 
         { 
             foreach (Product p in _system.ActiveProducts)
@@ -82,8 +86,14 @@
         public void Start()
         {
             Console.Clear();
-            Console.Write("Input Command: ");
+            DisplayProduct();
+            _running = true;
+            while (_running) 
+            { 
+            Console.Write("~~>: ");
+            Command.Invoke(Console.ReadLine());
             
+            }
 
         }
     }

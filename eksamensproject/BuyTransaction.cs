@@ -2,7 +2,7 @@
 {
     public class BuyTransaction : Transaction
     {
-        public Product Product { get; set; }
+        public Product Product { get; }
         public BuyTransaction(Product product, User user) : base(user, product.Price)
         {
             Product = product;

@@ -2,15 +2,14 @@
 {
     public class Transaction
     { 
-        private static int prevId= 1;
-        public int Id { get; set; }
-        public User User { get; set; }
-        public DateTime Date { get; set; }
-        public decimal Amount { get; set; }
+        private static uint _prevId= 0;
+        public uint Id { get; }
+        public User User { get; }
+        public DateTime Date { get; }
+        public decimal Amount { get; }
         public Transaction(User user, decimal amount) 
         { 
-            Id = prevId++;
-            prevId = prevId++;
+            Id = ++_prevId;
             User = user;
             Amount = amount;
             Date = DateTime.Now;

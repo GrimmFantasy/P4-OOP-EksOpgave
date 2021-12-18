@@ -2,6 +2,7 @@
 {
     public class Product 
     {
+        private static int _prevID= 1;
         private int _id;
         private string _name;
         public int Id 
@@ -25,13 +26,23 @@
         public decimal Price { get; set; }
         public ProStat State { get; set; }
         public bool CanBeBoughtOnCredit { get; set; }
-        public Product(int id, string name, decimal price, int stat) 
+        public Product(string name, decimal price, int stat, int? id = null) 
         {
             Name = name;
             Price = price;
             if (stat == 0) { State = ProStat.inActive; }
             else{ State = ProStat.Active; }
-            Id = id;
+            if (id != null && _prevID <= id) 
+            {
+                Id = id.Value;
+                _prevID = id.Value;
+                
+            }
+            else {
+                Id = ++_prevID;
+            }
+           
+
         }
         public override string ToString() 
         { 

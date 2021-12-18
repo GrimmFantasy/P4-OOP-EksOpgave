@@ -14,7 +14,8 @@
         void DisplayNotProductID(string errorString);
         void DisplayProduct();
         void Start();
-
+        event StregsystemEvent Command;
     }
+        public delegate void StregsystemEvent(string input);
 
 }
