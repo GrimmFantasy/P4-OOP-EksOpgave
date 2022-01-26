@@ -63,7 +63,7 @@ namespace EksOP
         public void ReadUsers()
         {
             Users = new List<User>();
-            foreach (var line in File.ReadLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\users.csv"))
+            foreach (var line in File.ReadLines(@"../../../users.csv"))
             {
                 if (!line.StartsWith("id"))
                 {
@@ -90,7 +90,7 @@ namespace EksOP
             decimal price;
             int id;
             int state;
-            foreach (var line in File.ReadLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\products.csv"))
+            foreach (var line in File.ReadLines(@"../../../products.csv"))
             {
                 if (!line.StartsWith("id"))
                 {
@@ -149,7 +149,7 @@ namespace EksOP
             }
 
 
-            File.WriteAllLines(@"C:\Users\capse\Documents\GitHub\EksOpgave\eksamensproject\TransLog.csv", logs);
+            File.WriteAllLines(@"../../../TransLog.csv", logs);
         }
     }
 
